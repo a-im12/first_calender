@@ -29,20 +29,19 @@ struct CalendarView: View {
 
                     if Calendar.current.isDate(date, equalTo: monthToDisplay, toGranularity:.month){
                         Button(action: {
-                            print("押されたお")
+                            print(date.getDayNumber())
                         }){
                         Text("\(date.getDayNumber())")
                             .padding(8)
                             .foregroundColor(.white)
-                            .background(Color.blue)
+                            .background(Color.gray)
                             .id(date)
                         }
                     }else{
                         Text("\(date.getDayNumber())")
                             .padding(8)
-                            .foregroundColor(.gray)
-                            .background(Color.blue)
-                            .hidden()
+                            .foregroundColor(.black)
+                            .background(Color.gray)
                     }
                 }
             }
@@ -51,11 +50,26 @@ struct CalendarView: View {
 }
 
 struct ContentView: View {
+    @State var num:Int = 0
     var body: some View {
         VStack {
-            if let targetMonth = Calendar.current.date(byAdding: .month, value: 0, to: Date()) {
+            if let targetMonth = Calendar.current.date(byAdding: .month, value: num, to: Date()) {
                 
-                Text("2022 09")
+                HStack{
+                    Button(action: {
+                        num -= 1
+                    }){
+                        Image(systemName: "lessthan")
+                    }
+                    
+                    Text(targetMonth.formatYearMonth())
+                    
+                    Button(action: {
+                        num += 1
+                    }){
+                        Image(systemName: "greaterthan")
+                    }
+                }
                 CalendarView(monthToDisplay: targetMonth)
             }
         }
@@ -67,6 +81,8 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+// extension some func for Date and Calendar
 extension Date {
     
     func getDayNumber()->Int {
@@ -84,6 +100,30 @@ extension Date {
         let resultDates = Calendar.current.generateDates(inside: DateInterval(start: monthFirstWeek.start, end: monthLastWeek.end),
                                                          matching: DateComponents(hour: 0, minute: 0, second: 0))
         return resultDates
+    }
+    
+    func formatYearMonth() -> String{
+        
+        let rowDate = self.formatted().split(separator: "/")
+        
+        var s = ""
+        var cnt = 0
+        
+        for i in rowDate[2]{
+            if cnt > 3{
+                break
+            }
+            s += String(i)
+            cnt += 1
+        }
+        
+        if rowDate[0].count < 2{
+            s += "  \(rowDate[0])月"
+        }else{
+            s += " \(rowDate[0])月"
+        }
+        
+        return s
     }
     
 }
