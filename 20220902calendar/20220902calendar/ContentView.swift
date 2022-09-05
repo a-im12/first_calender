@@ -18,7 +18,6 @@ struct CalendarView: View {
         self.monthToDisplay = monthToDisplay
     }
     var body: some View {
-        
         LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
             ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { weekdayName in
                 Text(weekdayName)
@@ -34,6 +33,7 @@ struct CalendarView: View {
                         Text("\(date.getDayNumber())")
                             .padding(8)
                             .foregroundColor(.white)
+                            .frame(width: 50, height: 50)
                             .background(Color.gray)
                             .id(date)
                         }
@@ -41,6 +41,7 @@ struct CalendarView: View {
                         Text("\(date.getDayNumber())")
                             .padding(8)
                             .foregroundColor(.black)
+                            .frame(width: 50, height: 50)
                             .background(Color.gray)
                     }
                 }
@@ -53,6 +54,10 @@ struct ContentView: View {
     @State var num:Int = 0
     var body: some View {
         VStack {
+            
+            Text("Simple Calendar")
+                .font(.title)
+                .padding()
             if let targetMonth = Calendar.current.date(byAdding: .month, value: num, to: Date()) {
                 
                 HStack{
